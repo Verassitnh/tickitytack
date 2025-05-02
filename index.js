@@ -25,28 +25,16 @@ function getGameState(id) {
     }
 
     function checkPlayerVictory(playerMoves) {
-        playerVictory = false
-        
-        playerMoves.forEach((playerMove) => {
-            let patterns = victoryPatterns;
-            for (let index = 0; index < patterns.length; index++) {
-                let pattern = patterns[index]
-
-                const indexOfMatch = pattern.indexOf(Number(playerMove))
-                
-                if (indexOfMatch != -1) {
-                    pattern = pattern.splice(indexOfMatch, 1)
-                }
-
-                if (pattern.length == 0) {
-                    playerVictory = true 
-                    break;
-                }
+        for (let pattern of victoryPatterns) {
+            let allMovesPresent = pattern.every(move => playerMoves.includes(move));
+            if (allMovesPresent) {
+                return true;
             }
-        })  
-
-        return playerVictory
+        }
+        return false;
     }
+
+    
     function createVictoryPatterns() {
         let patterns = []
     

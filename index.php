@@ -81,6 +81,15 @@
             transform: scale(0.95);
         }
 
+        .game-over {
+            padding: 50px;
+        }
+
+        #game-over>button {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
         /* Styling for X and O after selection */
         td:not(:has(button)) {
             font-size: 2.5rem;
@@ -113,7 +122,8 @@
     <h1>PHP tic tac toe demo</h1>
 
 
-    <table id="table">
+
+    <table>
         <tbody>
             <?php
             function drawboard()
@@ -131,23 +141,22 @@
         </tbody>
     </table>
 
+    <div id="game-over"></div>
     <script src="./index.js"></script>
     <script>
         const gameState = getGameState()
 
         function selectSquare(id) {
             let square = document.getElementById(id)
-            let table = document.getElementById("table")
+            let gameOver = document.getElementById("game-over")
 
             square.innerHTML = gameState.nextMove(id)
 
             if (gameState.checkVictory()) {
-                table.outerHTML = `
-                    <div>
+                gameOver.innerHTML = `
                         <h2>game over!</h2>
                         
                         <button onclick="restart()">play again</button>
-                    </div>
                 `
             }
         }

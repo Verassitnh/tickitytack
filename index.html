@@ -81,6 +81,15 @@
             transform: scale(0.95);
         }
 
+        .game-over {
+            padding: 50px;
+        }
+
+        #game-over>button {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
         /* Styling for X and O after selection */
         td:not(:has(button)) {
             font-size: 2.5rem;
@@ -113,28 +122,28 @@
     <h1>PHP tic tac toe demo</h1>
 
 
-    <table id="table">
+
+    <table>
         <tbody>
             <tr><td id='1'><button onclick='selectSquare(1)'></button></td><td id='2'><button onclick='selectSquare(2)'></button></td><td id='3'><button onclick='selectSquare(3)'></button></td><tr><td id='4'><button onclick='selectSquare(4)'></button></td><td id='5'><button onclick='selectSquare(5)'></button></td><td id='6'><button onclick='selectSquare(6)'></button></td><tr><td id='7'><button onclick='selectSquare(7)'></button></td><td id='8'><button onclick='selectSquare(8)'></button></td><td id='9'><button onclick='selectSquare(9)'></button></td>        </tbody>
     </table>
 
+    <div id="game-over"></div>
     <script src="./index.js"></script>
     <script>
         const gameState = getGameState()
 
         function selectSquare(id) {
             let square = document.getElementById(id)
-            let table = document.getElementById("table")
+            let gameOver = document.getElementById("game-over")
 
             square.innerHTML = gameState.nextMove(id)
 
             if (gameState.checkVictory()) {
-                table.outerHTML = `
-                    <div>
+                gameOver.innerHTML = `
                         <h2>game over!</h2>
                         
                         <button onclick="restart()">play again</button>
-                    </div>
                 `
             }
         }
