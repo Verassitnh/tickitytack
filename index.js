@@ -3,7 +3,7 @@ function getGameState(id) {
     const player1 = "X"
     const player2 = "O"
 
-    let victoryPatterns = []
+    let victoryPatterns = createVictoryPatterns()
 
     function row(i, adder) {
         let result = []
@@ -11,15 +11,26 @@ function getGameState(id) {
             result.push(x)
         }
         
+        // make sure its not greater than 9
         if (result[result.length - 1] > 9) return null
+
+        const endpins = [3, 6, 9, 8, 7]
+        let straightLine = false
+        endpins.forEach((pin) => {
+            if (result[result.length - 1] == pin) straightLine = true
+        })
+
+        if (straightLine != true) return null
         else return result
     }
 
     function checkPlayerVictory(playerMoves) {
         playerVictory = false
+        
         playerMoves.forEach((playerMove) => {
-            for (let index = 0; index < victoryPatterns.length; index++) {
-                let pattern = victoryPatterns[index];
+            let patterns = victoryPatterns;
+            for (let index = 0; index < patterns.length; index++) {
+                let pattern = patterns[index]
 
                 const indexOfMatch = pattern.indexOf(Number(playerMove))
                 
@@ -29,25 +40,27 @@ function getGameState(id) {
 
                 if (pattern.length == 0) {
                     playerVictory = true 
-                    break
+                    break;
                 }
             }
         })  
 
         return playerVictory
     }
-
-    for (let i = 1; i <= 7; i++) {
-        if (i == 5 || i == 6) continue;
+    function createVictoryPatterns() {
+        let patterns = []
+    
+        for (let i = 1; i <= 7; i++) {
+            if (i == 5 || i == 6) continue;
         
-        victoryPatterns.push(row(i, 1)) // checks for horizontal victory pattern
-        victoryPatterns.push(row(i, 3)) // checks for vertical victory pattern
-        victoryPatterns.push(row(i, 4)) // checks for diagnal victory pattern
+            patterns.push(row(i, 1)) // checks for horizontal victory pattern
+            patterns.push(row(i, 3)) // checks for vertical victory pattern
+            patterns.push(row(i, 4)) // checks for diagnal victory pattern
+            patterns.push(row(i, -2)) // checks for backwards diagnal victory pattern
+
+        }
+        return patterns.filter((v) => v != null)
     }
-    victoryPatterns = victoryPatterns.filter((v) => v != null)
-
-    console.log(victoryPatterns)
-
 
     return {
         nextMove: (id) => {
